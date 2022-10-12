@@ -1,0 +1,41 @@
+<!--OLA INGE, TANTO COMO PARA SESSIONSTORAGE Y LOCALSTORAGE LO HEMOS QUERIDO JUNTAR EN UN EJERCICIO 
+    FUNCIONAL POR MEDIO DE UN FORMULARIO QUE ALMACENE DATOS TANTO DE FORMA PERMANENTE CON LOCALSTORAGE
+    ASI COMO TAMBIEN LA INFORMACION SE ELIMINE CUANDO SE CIERRE EL NAVEGADOR CON SESSIONSTORAGE-->
+<DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>EJEMPLO 1 Y 2 DAW</title>
+</head>
+<body>
+      <!--Encabezado principal del formulario-->
+    <div id="estilo">
+        <h1 class="fuente">Guardando datos de formulario con Session Storage y Local Storage</h1>
+    </div>
+    <div>
+          <!--Campos que debe de completar el usuario-->
+        <form action="#" name="formLogin" id="formLogin">
+            <div>
+                <label for="user">Nombre:</label>
+                <input type="text" name="user" id="user">
+            </div>
+            <div>
+                <label for="userEmail">Correo:</label>
+                <input type="email" name="userEmail" id="userEmail">
+            </div>
+            <div>
+                <label for="userPassword">Contraseña:</label>
+                <input type="password" name="userPassword" id="userPassword">
+            </div>
+            <div>
+                <input type="button" value="Enviar" id="send" onclick="login()">
+            </div>
+        </form>
+    </div>
+</body>
+
+<script src="login.js"></script>
+</html>

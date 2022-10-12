@@ -1,0 +1,92 @@
+<!-- EJERCICIO 3 DAW utilizando IndexedDB, el ejemplo consiste en que por medio de un formulario para 
+almacenar notas de estudiantes, creando una base de datos llamada notasBd, por medio de indexedDB las
+notas de los estudiantes queden almacenadas en esa base de datos que esta situada en el Navegador web -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJERCICIO 3 DAW</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+          <!--Encabezado principal-->
+    <div id="estilo">
+        <h1 class="fuente">Guardando notas de alumnos utilizando IndexedDB</h1>
+    </div>    
+    Agregar nota de alumno <br>
+
+<!--Encabezado del formulario-->
+    <form action="#">
+        <div>
+            <!--Campo que debe de llenar para poder almacenar la nota del estudiante-->
+            <label for="contenido">Nota que desea guardar:</label>
+            <input type="text" id="contenido">
+            
+        </div>
+    </form>
+    <button id="btnAgregar">Guardar nota</button>
+    <h4>
+        <a href='../menu.html'>Regresar al menu principal</a>
+
+    </h4>
+
+    <hr>
+
+    <div id="resultado"></div>
+
+    <script>
+    
+        window.addEventListener('load', () => {
+            // Declaracion de variables
+            //Ocupamos let ya que estamos limitando su alcance ya que se ocupan para la base de datos y la conexion
+    
+            let baseDatos;
+            let solicitudConexion = indexedDB.open('notasBd', 1);
+    // Declaramos como evento a la funcion que se encarga de conectar la base de datos
+            solicitudConexion.onsuccess = function(evento) {
+                // Evento cuando la conexion se realice de forma exitosa
+                baseDatos = evento.target.result;
+            }
+    
+            solicitudConexion.onerror = function(evento) {
+                // Evento cuando no se pueda acceder a la base de datos notasBd
+                document.querySelector('#resultado').innerText = `Error al abrir la base de datos: ${evento.target.errorCode}`;
+            }
+    
+            solicitudConexion.onupgradeneeded = function(evento) {
+                 // Declaramos el evento onupgradeneeded ya que este se se activa cuando se intenta abrir una base de datos.
+                baseDatos = event.target.result;
+                // Una vez se acceda a la base de datos, se procede a leer la nota que se ha ingresado
+                let notas = baseDatos.createObjectStore('notas', {autoIncrement: true});
+            }
+                // Definir la funcion del evento encargado del boton del formulario "Guardar nota"
+            document.querySelector('#btnAgregar').addEventListener('click', function(evento) {
+                let contenido = document.querySelector('#contenido').value;
+    
+                if(contenido.length){
+                    let transaccion = baseDatos.transaction(['notas'], 'readwrite');
+                    let notas = transaccion.objectStore('notas');
+    
+                    let nota = {contenido: contenido, estampa_tiempo: Date.now()};
+                    notas.add(nota);
+                // Transaccion encargada de que la nota se almacene en la base de datos de forma exitosa
+                    transaccion.oncomplete = function() {
+                        document.querySelector('#resultado').innerText = 'La nota se ha almacenado en la base de datos exitosamente !! - Ver la base de datos por consola para corroborar:)';
+                    }
+                    // Transaccion encargada de notificar un error diciendo que la nota no se ha podido almacenar
+
+                    transaccion.onerror = function(evento) {
+                        document.querySelector('#resultado').innerText = `Error al intentar almacenar una nota: ${evento.target.errorCode}`;
+                    }
+                    // El usuario ha dejado vacio el campo para ingresar notas
+                } else {
+                    document.querySelector('#resultado').innerText = 'No ha escrito ningún valor en el campo !!';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
